@@ -3,11 +3,9 @@ const removeBtn: HTMLButtonElement | null = document.querySelector("#remove-btn"
 const todoList: HTMLElement | null = document.querySelector("#todo-list");
 const todoInput: HTMLInputElement | null = document.querySelector("#todo-input");
 
-// Load todos from local storage
 const savedTodos = localStorage.getItem('todos');
 const todos: { id: number; text: string; }[] = savedTodos ? JSON.parse(savedTodos) : [];
 
-// Render todos
 function renderTodos() {
     todoList.innerHTML = '';
     todos.forEach(todo => {
@@ -15,6 +13,7 @@ function renderTodos() {
         todoDiv.classList.add('todo-item');
         todoDiv.dataset.todoId = String(todo.id);
         todoDiv.innerHTML = `
+            <input type="checkbox" class="done-box">
             <p>${todo.text}</p>
             <div class="item-btns">
                 <button class="item-btn" id="edit-btn">Edit</button>
@@ -25,15 +24,25 @@ function renderTodos() {
         
         const editBtn = todoDiv.querySelector('#edit-btn');
         const removeBtn = todoDiv.querySelector('#remove-btn');
+        const doneBox = todoDiv.querySelector(".done-box") as HTMLInputElement;
+
+        doneBox.addEventListener('change', function() {
+            if (doneBox.checked) {
+                todoDiv.classList.add('completed');
+            } else {
+                todoDiv.classList.remove('completed');
+            }
+ 
+            updateTodoState(todo.id, doneBox.checked);
+        });
+
         if (editBtn) {
             editBtn.addEventListener('click', function() {
                 const newText = prompt("Please enter the updated todo text");
                 if (newText) {
                     todoDiv.querySelector('p')!.textContent = newText;
-                    // Update the todo text in the array
                     const updatedTodo = todos.find(t => t.id === todo.id);
                     if (updatedTodo) updatedTodo.text = newText;
-                    // Update local storage
                     localStorage.setItem('todos', JSON.stringify(todos));
                 }
             });
@@ -41,16 +50,26 @@ function renderTodos() {
         if (removeBtn) {
             removeBtn.addEventListener('click', function() {
                 todoList.removeChild(todoDiv);
-                // Remove the todo from the array
                 const index = todos.findIndex(t => t.id === todo.id);
                 if (index !== -1) {
                     todos.splice(index, 1);
-                    // Update local storage
                     localStorage.setItem('todos', JSON.stringify(todos));
                 }
             });
         }
+
+        const savedState = localStorage.getItem(`todo_${todo.id}_state`);
+        if (savedState) {
+            doneBox.checked = savedState === 'true';
+            if (doneBox.checked) {
+                todoDiv.classList.add('completed');
+            }
+        }
     });
+}
+
+function updateTodoState(todoId: number, isChecked: boolean) {
+    localStorage.setItem(`todo_${todoId}_state`, String(isChecked));
 }
 
 addBtn?.addEventListener("click", function() {
@@ -70,5 +89,4 @@ removeBtn?.addEventListener("click", function() {
     localStorage.removeItem('todos');
 });
 
-// Initial render
 renderTodos();
