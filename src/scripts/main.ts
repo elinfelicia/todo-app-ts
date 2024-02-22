@@ -1,6 +1,7 @@
 const addBtn: HTMLButtonElement | null = document.querySelector("#add-btn");
-const removeBtn: HTMLButtonElement | null = document.querySelector("#remove-btn");
-const todoList: HTMLElement | null = document.querySelector("#todo-list");
+const removeBtn: HTMLButtonElement | null = document.querySelector(".remove-btn");
+const clearBtn: HTMLButtonElement | null = document.querySelector("#remove-all-btn")
+const todoList: HTMLUListElement | null = document.querySelector("#todo-list");
 const todoInput: HTMLInputElement | null = document.querySelector("#todo-input");
 
 const savedTodos = localStorage.getItem('todos');
@@ -16,8 +17,8 @@ function renderTodos() {
             <input type="checkbox" class="done-box">
             <p>${todo.text}</p>
             <div class="item-btns">
-                <button class="item-btn" id="edit-btn">Edit</button>
-                <button class="item-btn" id="remove-btn">Remove</button>
+                <button class="item-btn" id="edit-btn"><i class="fa-solid fa-pen"></i></button>
+                <button class="item-btn remove-btn" id="remove-btn"><i class="fa-solid fa-trash-can"></i></button>
             </div>
         `;
         todoList.appendChild(todoDiv);
@@ -54,6 +55,7 @@ function renderTodos() {
                 if (index !== -1) {
                     todos.splice(index, 1);
                     localStorage.setItem('todos', JSON.stringify(todos));
+                    updateTodoState(todo.id, doneBox.checked=false);
                 }
             });
         }
@@ -70,7 +72,8 @@ function renderTodos() {
 
 function updateTodoState(todoId: number, isChecked: boolean) {
     localStorage.setItem(`todo_${todoId}_state`, String(isChecked));
-}
+};
+
 
 addBtn?.addEventListener("click", function() {
     if (todoInput && todoInput.value.trim() !== '') {
@@ -88,5 +91,10 @@ removeBtn?.addEventListener("click", function() {
     todos.length = 0;
     localStorage.removeItem('todos');
 });
+
+clearBtn?.addEventListener("click", function() {
+    localStorage.clear()
+})
+
 
 renderTodos();

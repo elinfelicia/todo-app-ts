@@ -1,6 +1,7 @@
 "use strict";
 const addBtn = document.querySelector("#add-btn");
-const removeBtn = document.querySelector("#remove-btn");
+const removeBtn = document.querySelector(".remove-btn");
+const clearBtn = document.querySelector("#remove-all-btn");
 const todoList = document.querySelector("#todo-list");
 const todoInput = document.querySelector("#todo-input");
 const savedTodos = localStorage.getItem('todos');
@@ -15,8 +16,8 @@ function renderTodos() {
             <input type="checkbox" class="done-box">
             <p>${todo.text}</p>
             <div class="item-btns">
-                <button class="item-btn" id="edit-btn">Edit</button>
-                <button class="item-btn" id="remove-btn">Remove</button>
+                <button class="item-btn" id="edit-btn"><i class="fa-solid fa-pen"></i></button>
+                <button class="item-btn remove-btn" id="remove-btn"><i class="fa-solid fa-trash-can"></i></button>
             </div>
         `;
         todoList.appendChild(todoDiv);
@@ -51,6 +52,7 @@ function renderTodos() {
                 if (index !== -1) {
                     todos.splice(index, 1);
                     localStorage.setItem('todos', JSON.stringify(todos));
+                    updateTodoState(todo.id, doneBox.checked = false);
                 }
             });
         }
@@ -66,6 +68,7 @@ function renderTodos() {
 function updateTodoState(todoId, isChecked) {
     localStorage.setItem(`todo_${todoId}_state`, String(isChecked));
 }
+;
 addBtn === null || addBtn === void 0 ? void 0 : addBtn.addEventListener("click", function () {
     if (todoInput && todoInput.value.trim() !== '') {
         const todoId = todos.length > 0 ? todos[todos.length - 1].id + 1 : 1;
@@ -80,5 +83,8 @@ removeBtn === null || removeBtn === void 0 ? void 0 : removeBtn.addEventListener
     todoList.innerHTML = '';
     todos.length = 0;
     localStorage.removeItem('todos');
+});
+clearBtn === null || clearBtn === void 0 ? void 0 : clearBtn.addEventListener("click", function () {
+    localStorage.clear();
 });
 renderTodos();

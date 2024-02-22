@@ -5,23 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&display=swap" rel="stylesheet">    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,400;0,700;1,100;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/src/styles/style.css">
     <link rel="stylesheet" href="/src/styles/media.css">
+    <script src="https://kit.fontawesome.com/44ff6c67ff.js" crossorigin="anonymous"></script>    
     <script type="module" src="/dist/main.js" defer></script>
     <title>Todo List</title>
 </head>
 <body>
     <div class="wrapper">
         <header>
-            <h1>Todo List</h1>
-        </header>
-        <main>
             <form class="todo-form">
+            <h1 class="title">TODO</h1>
                 <label for="todo-input">What do you need to do?</label>
                 <input type="text" id="todo-input" placeholder="Enter To Do...">
-                <button type="submit" class="todo-btn" id="add-btn">Add Todo</button>
+                <div class="form-btns">
+                    <button type="submit" class="btn todo-btn" id="add-btn">Add Todo</button>
+                    <button type="button" class="btn remove-btn" id="remove-all-btn">Clear List</button>
+                </div>
             </form>
+        </header>
+        <main>
             <ul id="todo-list">
                 <!-- List items will be added dynamically here -->
             </ul>
